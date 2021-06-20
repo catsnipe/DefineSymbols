@@ -1,0 +1,28 @@
+{
+    "Data": [
+        {
+            "Enabled": true,
+            "Define": "DEBUG",
+            "Description": "description: debug symbol",
+            "Target": 0
+        },
+        {
+            "Enabled": true,
+            "Define": "TEST_VIEW",
+            "Description": "description: test view",
+            "Target": 0
+        },
+        {
+            "Enabled": true,
+            "Define": "CHEAT_TOOL",
+            "Description": "description: enable cheat tool",
+            "Target": 0
+        },
+        {
+            "Enabled": true,
+            "Define": "iOS_RESOURCE",
+            "Description": "",
+            "Target": 4
+        }
+    ]
+}
