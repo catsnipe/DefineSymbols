@@ -5,15 +5,15 @@ Manage'Scripting Define Symbols' on the GUI for Unity Editor
 ↓  
 ![image](https://user-images.githubusercontent.com/85425896/122647591-c7da4180-d15f-11eb-9e44-a119e34e56b4.png)  
 
-# requirement  
+## requirement  
 unity2017 or later
   
-# features
+## features
 * Manage'Scripting Define Symbols' on the GUI.
 * You can change the disabled / enabled of the registered definition with the check box.
 * Supports definitions for each platform.
 
-# usage  
+## usage  
 1. Copy to 'Assets/Editor'.  
   **DefineSymbols.cs**  
 2. Select 'Tools/Define Symbols'.
