@@ -20,9 +20,9 @@
         },
         {
             "Enabled": true,
-            "Define": "iOS_RESOURCE",
+            "Define": "iOS_Android",
             "Description": "",
-            "Target": 4
+            "Target": 7
         }
     ]
 }

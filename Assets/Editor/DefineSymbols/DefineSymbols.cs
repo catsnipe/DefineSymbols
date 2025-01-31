@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEngine;
 
 /// <summary>
@@ -104,9 +105,17 @@ public class DefineSymbols : EditorWindow
             }
             defines = JsonUtility.FromJson<JsonParameter>(data);
         }
-        
+
         // データがなければ Scripting Define Symbols からデータを作成
-        defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+        NamedBuildTarget namedTarget = GetNamedBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup);
+
+        if (namedTarget == NamedBuildTarget.Unknown)
+        {
+            return false;
+        }
+
+        defineSymbols = PlayerSettings.GetScriptingDefineSymbols(namedTarget);
+//        defineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
         if (string.IsNullOrEmpty(defineSymbols) == false && defineSymbols[defineSymbols.Length-1] != ';')
         {
             defineSymbols += ";";
@@ -280,10 +289,58 @@ public class DefineSymbols : EditorWindow
     /// </summary>
     static void refreshScriptingDefineSymbols()
     {
-        PlayerSettings.SetScriptingDefineSymbolsForGroup(
-            EditorUserBuildSettings.selectedBuildTargetGroup,
-            defineSymbols
-        );
+        NamedBuildTarget namedTarget = GetNamedBuildTarget(EditorUserBuildSettings.selectedBuildTargetGroup);
+
+        if (namedTarget == NamedBuildTarget.Unknown)
+        {
+            return;
+        }
+
+        PlayerSettings.SetScriptingDefineSymbols(namedTarget, defineSymbols);
+
+        // Obsolate
+        //PlayerSettings.SetScriptingDefineSymbolsForGroup(
+        //    EditorUserBuildSettings.selectedBuildTargetGroup,
+        //    defineSymbols
+        //);
+    }
+
+    static NamedBuildTarget GetNamedBuildTarget(BuildTargetGroup targetGroup)
+    {
+        NamedBuildTarget namedTarget = NamedBuildTarget.Unknown;
+
+        // NamedBuildTarget.FromBuildTargetGroup はサーバーが Standalone になるらしいので手動 switch
+        switch (EditorUserBuildSettings.selectedBuildTargetGroup)
+        {
+            case BuildTargetGroup.Android:
+                namedTarget = NamedBuildTarget.Android;
+                break;
+            case BuildTargetGroup.iOS:
+                namedTarget = NamedBuildTarget.iOS;
+                break;
+            case BuildTargetGroup.PS4:
+                namedTarget = NamedBuildTarget.PS4;
+                break;
+            case BuildTargetGroup.PS5:
+                namedTarget = NamedBuildTarget.PS5;
+                break;
+            case BuildTargetGroup.XboxOne:
+                namedTarget = NamedBuildTarget.XboxOne;
+                break;
+            case BuildTargetGroup.Switch:
+                namedTarget = NamedBuildTarget.NintendoSwitch;
+                break;
+            case BuildTargetGroup.Standalone:
+                namedTarget = NamedBuildTarget.Standalone;
+                break;
+        }
+
+        if (namedTarget == NamedBuildTarget.Unknown)
+        {
+            Debug.LogError($"unknown target: {EditorUserBuildSettings.selectedBuildTargetGroup}");
+        }
+
+        return namedTarget;
     }
 
 }
